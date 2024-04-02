@@ -7,4 +7,4 @@ urlpatterns = [
     path('home/', views.home, name="home"),
 ]
 
-app_name = "store"
+app_name = "store_app"
