@@ -1,26 +1,28 @@
-.goodnessseccont img {
+.good_card_content img {
   width: 100%;
 }
 
-.buttermilk{
-  background-color: #fff;
-  background-image: linear-gradient(#fff7ef, #fff);
+.good_card {
   padding: 50px 40px;
   border: 1px solid #efe8e1;
-  padding-bottom: 20px;
 }
 
-.smbg{
+.butter_bg {
+  background-color: #fff;
+  background-image: linear-gradient(#fff7ef, #fff);
+}
+
+.gn_bg {
   background-color: #fff;
   background-image: linear-gradient(rgba(110, 69, 143, 0.1), #fff);
 }
 
-.curdbgpro{
+.curd_bg_pro {
   background-color: #fff;
   background-image: linear-gradient(rgba(10, 77, 123, 0.1), #fff);
 }
 
-.mlkpro{
+.mlk_pro {
   color: #636362;
   font-size: 22px;
   line-height: 22px;
@@ -29,6 +31,6 @@
   text-align:center;
 }
 
-.goodnesssec a{
+.good_card a{
     text-decoration: none;
 }
