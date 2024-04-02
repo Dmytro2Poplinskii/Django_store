@@ -2,9 +2,18 @@
   width: 100%;
 }
 
+.cards {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
 .good_card {
   padding: 50px 40px;
   border: 1px solid #efe8e1;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .butter_bg {
