@@ -7,12 +7,17 @@
   margin-bottom: 50px;
 }
 
+.good_card_container {
+  margin-top: 10px;
+}
+
 .good_card {
   padding: 50px 40px;
   border: 1px solid #efe8e1;
   height: 100%;
   display: flex;
   justify-content: center;
+  margin: 10px;
   align-items: center;
 }
 
