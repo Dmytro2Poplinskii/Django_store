@@ -10,6 +10,14 @@ def home(request: HttpRequest) -> HttpResponse:
     return render(request, "app/home.html")
 
 
+def about(request: HttpRequest) -> HttpResponse:
+    return render(request, "app/about.html")
+
+
+def contact(request: HttpRequest) -> HttpResponse:
+    return render(request, "app/contact.html")
+
+
 class CategoryView(View):
     def get(self, request: HttpRequest, name: str) -> HttpResponse:
         products = Product.objects.filter(category=name)
