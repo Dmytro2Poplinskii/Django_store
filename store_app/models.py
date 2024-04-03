@@ -23,5 +23,9 @@ class Product(models.Model):
     category = models.CharField(max_length=2, choices=CATEGORY_CHOICES)
     product_image = models.ImageField(upload_to="product")
 
+    @property
+    def price_with_discount(self) -> float:
+        return float(self.selling_price - self.discount_price)
+
     def __str__(self) -> str:
         return f"{self.title}"
