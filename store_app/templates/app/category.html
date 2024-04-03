@@ -9,13 +9,13 @@
     <div class="row">
       <div class="col-sm-3">
         <div class="list-group">
-          {% for value in title %}
+          {% for title in titles %}
             <a
-              href="#"
+              href="{% url "store_app:category-title" title.title %}"
               class="list-group-item list-group-item-action"
               aria-current="true"
             >
-                {{ value.title }}
+                {{ title.title }}
             </a>
           {% endfor %}
         </div>

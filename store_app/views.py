@@ -13,7 +13,15 @@ def home(request: HttpRequest) -> HttpResponse:
 class CategoryView(View):
     def get(self, request: HttpRequest, name: str) -> HttpResponse:
         products = Product.objects.filter(category=name)
-        title = Product.objects.filter(category=name).values("title").annotate(total=Count("title"))
+        titles = Product.objects.filter(category=name).values("title")
+
+        return render(request, "app/category.html", locals())
+
+
+class CategoryTitle(View):
+    def get(self, request: HttpRequest, name: str) -> HttpResponse:
+        products = Product.objects.filter(title=name)
+        titles = Product.objects.filter(category=products[0].category).values("title")
 
         return render(request, "app/category.html", locals())
 
