@@ -37,9 +37,14 @@
                     {% if product.discount_price == 0 %}
                       <small class="fw-light">{{ product.selling_price }}$</small>
                     {% else %}
-                      <div>Discount {{ product.discount_price }}</div>
-                      <div>Old price: <small class="fw-light text-decoration-line-through">{{ product.selling_price }}$</small></div>
-                      <small class="fw-light">{{ product.price_with_discount }}$</small>
+                      <div>Discount {{ product.discount_price }}$</div>
+                      <div>
+                        Old price:
+                        <small class="fw-light text-decoration-line-through">
+                          {{ product.selling_price }}$
+                        </small>
+                      </div>
+                      <small class="text-info">NEW PRICE: {{ product.price_with_discount }}$</small>
                     {% endif %}
 
                   </div>
