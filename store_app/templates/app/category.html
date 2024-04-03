@@ -24,7 +24,7 @@
         <div class="row">
           {% for product in products %}
             <div class="col text-center mb-4">
-              <a href="#" class="btn">
+              <a href="{% url "store_app:product-detail" product.id %}" class="btn">
                 <div>
                   <img
                     src="{{ product.product_image.url }}"
