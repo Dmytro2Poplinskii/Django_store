@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.views import View
 
 from .models import Product
+from .forms import CustomerRegistrationForm
 
 
 def home(request: HttpRequest) -> HttpResponse:
@@ -39,3 +40,11 @@ class ProductDetail(View):
         product = Product.objects.get(pk=pk)
 
         return render(request, "app/product_detail.html", locals())
+
+
+class CustomerRegistrationView(View):
+    def get(self, request: HttpRequest) -> HttpResponse:
+        form = CustomerRegistrationForm()
+
+        return render(request, "app/customer_registration.html", locals())
+
