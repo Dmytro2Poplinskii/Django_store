@@ -1,6 +1,9 @@
+from django.db.models import Count
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render
 from django.views import View
+
+from .models import Product
 
 
 def home(request: HttpRequest) -> HttpResponse:
@@ -9,4 +12,7 @@ def home(request: HttpRequest) -> HttpResponse:
 
 class CategoryView(View):
     def get(self, request: HttpRequest, name: str) -> HttpResponse:
+        products = Product.objects.filter(category=name)
+        title = Product.objects.filter(category=name).values("title").annotate(total=Count("title"))
+
         return render(request, "app/category.html", locals())
