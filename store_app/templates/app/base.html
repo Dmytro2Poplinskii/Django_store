@@ -80,7 +80,12 @@
             <li><a href="{% url "store_app:profile" %}" class="dropdown-item">Profile</a></li>
             <li><a href="#" class="dropdown-item">Orders</a></li>
             <li><a href="{% url "store_app:password-change" %}" class="dropdown-item">Change password</a></li>
-            <li><a href="#" class="dropdown-item">Logout</a></li>
+            <li>
+              <form action="{% url "store_app:logout" %}" method="post">
+                {% csrf_token %}
+                <button href="{% url "store_app:logout" %}" type="submit" class="dropdown-item">Logout</button>
+              </form>
+            </li>
           </ul>
         </li>
         <li class="nav-item mx-2">
