@@ -1,6 +1,14 @@
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UsernameField
 from django import forms
 from django.contrib.auth.models import User
+
+
+class CustomerLoginForm(AuthenticationForm):
+    username = UsernameField(widget=forms.TextInput(attrs={"class": "form-control", "autofocus": "True"}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={
+        "class": "form-control",
+        "autocomplete": "current-password"
+    }))
 
 
 class CustomerRegistrationForm(UserCreationForm):
