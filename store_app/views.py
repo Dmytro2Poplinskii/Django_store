@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.views import View
 from django.contrib import messages
 
-from .models import Product
+from .models import Product, Customer
 from .forms import CustomerRegistrationForm, CustomerProfileForm
 
 
@@ -66,5 +66,32 @@ class CustomerProfileView(View):
         return render(request, "app/profile.html", locals())
 
     def post(self, request: HttpRequest) -> HttpResponse:
+        form = CustomerProfileForm(request.POST)
+
+        if form.is_valid():
+            user = request.user
+            name = form.cleaned_data["name"]
+            location = form.cleaned_data["location"]
+            city = form.cleaned_data["city"]
+            phone = form.cleaned_data["phone"]
+            state = form.cleaned_data["state"]
+            zip_code = form.cleaned_data["zip_code"]
+
+            customer = Customer(
+                user=user,
+                name=name,
+                location=location,
+                city=city,
+                phone=phone,
+                state=state,
+                zip_code=zip_code,
+            )
+
+            customer.save()
+
+            messages.success(request, "Your profile has been saved successfully!")
+        else:
+            messages.warning(request, "Invalid input data, please try again.")
+
         return render(request, "app/profile.html", locals())
 
