@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpRequest
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
 
@@ -104,11 +104,37 @@ def address(request: HttpRequest) -> HttpResponse:
 
 class UpdateAddressView(View):
     def get(self, request: HttpRequest, pk: int) -> HttpResponse:
-        form = CustomerProfileForm()
+        user_address = Customer.objects.get(pk=pk)
+        form = CustomerProfileForm(instance=user_address)
 
         return render(request, "app/update_address.html", locals())
 
     def post(self, request: HttpRequest, pk: int) -> HttpResponse:
         form = CustomerProfileForm(request.POST)
 
-        return render(request, "app/update_address.html", locals())
+        if form.is_valid():
+            user = request.user
+            name = form.cleaned_data["name"]
+            location = form.cleaned_data["location"]
+            city = form.cleaned_data["city"]
+            phone = form.cleaned_data["phone"]
+            state = form.cleaned_data["state"]
+            zip_code = form.cleaned_data["zip_code"]
+
+            customer = Customer(
+                user=user,
+                name=name,
+                location=location,
+                city=city,
+                phone=phone,
+                state=state,
+                zip_code=zip_code,
+            )
+
+            customer.save()
+
+            messages.success(request, "Your profile has been saved successfully!")
+        else:
+            messages.warning(request, "Invalid input data, please try again.")
+
+        return redirect("store_app:address")
