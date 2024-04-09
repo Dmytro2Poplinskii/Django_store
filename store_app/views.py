@@ -60,3 +60,11 @@ class CustomerRegistrationView(View):
 
         return render(request, "app/customer_registration.html", locals())
 
+
+class CustomerProfileView(View):
+    def get(self, request: HttpRequest, pk: int) -> HttpResponse:
+        return render("app/customer_profile.html", locals())
+
+    def post(self, request: HttpRequest, pk: int) -> HttpResponse:
+        return render("app/customer_profile.html", locals())
+

@@ -1,5 +1,5 @@
+from django.contrib.auth.models import User
 from django.db import models
-
 
 CATEGORY_CHOICES = (
     ("CR", "Curd"),
@@ -10,6 +10,19 @@ CATEGORY_CHOICES = (
     ("GH", "Ghee"),
     ("CZ", "Cheese"),
     ("IC", "Ice-Greans"),
+)
+
+STATE_CHOICES = (
+    ('AL', 'Alabama'),
+    ('AK', 'Alaska'),
+    ('AZ', 'Arizona'),
+    ('AR', 'Arkansas'),
+    ('CA', 'California'),
+    ('CO', 'Colorado'),
+    ('CT', 'Connecticut'),
+    ('DE', 'Delaware'),
+    ('FL', 'Florida'),
+    ('GA', 'Georgia'),
 )
 
 
@@ -29,3 +42,16 @@ class Product(models.Model):
 
     def __str__(self) -> str:
         return f"{self.title}"
+
+
+class Customer(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    location = models.CharField(max_length=100)
+    city = models.CharField(max_length=50)
+    phone = models.IntegerField(default=0)
+    zip_code = models.IntegerField()
+    state = models.CharField(choices=STATE_CHOICES, max_length=3)
+
+    def __str__(self) -> str:
+        return f"{self.name}"

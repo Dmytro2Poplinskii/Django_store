@@ -32,3 +32,7 @@ class CustomerRegistrationForm(UserCreationForm):
 
 class CustomerPasswordResetForm(PasswordResetForm):
     pass
+
+
+class CustomerProfileForm(forms.ModelForm):
+    pass
