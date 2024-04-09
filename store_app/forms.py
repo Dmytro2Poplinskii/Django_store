@@ -1,4 +1,4 @@
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UsernameField
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UsernameField, PasswordResetForm
 from django import forms
 from django.contrib.auth.models import User
 
@@ -28,3 +28,7 @@ class CustomerRegistrationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'email', 'password1', 'password2')
+
+
+class CustomerPasswordResetForm(PasswordResetForm):
+    pass

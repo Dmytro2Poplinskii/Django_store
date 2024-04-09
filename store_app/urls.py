@@ -1,6 +1,8 @@
 from django.urls import path
+from django.contrib.auth import views as auth_views
 
 from . import views
+from . import forms
 
 urlpatterns = [
     path("home/", views.home, name="home"),
@@ -12,6 +14,15 @@ urlpatterns = [
 
     # login
     path("register/", views.CustomerRegistrationView.as_view(), name="register"),
+    path("login/", auth_views.LoginView.as_view(
+        template_name="app/login.html",
+        authentication_form=forms.CustomerLoginForm
+        ),
+        name="login"
+    ),
+    path("password_reset/", auth_views.PasswordResetView.as_view(
+        template_name="app/password-reset.html", form_class=forms.CustomerPasswordResetForm
+    ), name="password-reset"),
 ]
 
 app_name = "store_app"
