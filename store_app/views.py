@@ -95,3 +95,8 @@ class CustomerProfileView(View):
 
         return render(request, "app/profile.html", locals())
 
+
+def address(request: HttpRequest) -> HttpResponse:
+    addresses = Customer.objects.filter(user=request.user)
+
+    return render(request, "app/address.html", locals())
