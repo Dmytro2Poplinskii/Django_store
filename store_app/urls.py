@@ -38,7 +38,7 @@ urlpatterns = [
         template_name="app/password_reset.html", form_class=forms.CustomerPasswordResetForm
     ), name="password-reset"),
     path("password-reset/done/", auth_views.PasswordResetDoneView.as_view(
-        tempplate_name="app/password_reset_done.html"
+        template_name="app/password_reset_done.html"
     ), name="password-reset-done"),
     path("password-reset-confirm/<uidb64>/<token>/", auth_views.PasswordResetConfirmView.as_view(
         template_name="app/password_reset_confirm.html", form_class=forms.CustomerPasswordSetForm
