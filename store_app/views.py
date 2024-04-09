@@ -113,27 +113,17 @@ class UpdateAddressView(View):
         form = CustomerProfileForm(request.POST)
 
         if form.is_valid():
-            user = request.user
-            name = form.cleaned_data["name"]
-            location = form.cleaned_data["location"]
-            city = form.cleaned_data["city"]
-            phone = form.cleaned_data["phone"]
-            state = form.cleaned_data["state"]
-            zip_code = form.cleaned_data["zip_code"]
-
-            customer = Customer(
-                user=user,
-                name=name,
-                location=location,
-                city=city,
-                phone=phone,
-                state=state,
-                zip_code=zip_code,
-            )
+            customer = Customer.objects.get(pk=pk)
+            customer.name = form.cleaned_data["name"]
+            customer.location = form.cleaned_data["location"]
+            customer.city = form.cleaned_data["city"]
+            customer.phone = form.cleaned_data["phone"]
+            customer.state = form.cleaned_data["state"]
+            customer.zip_code = form.cleaned_data["zip_code"]
 
             customer.save()
 
-            messages.success(request, "Your profile has been saved successfully!")
+            messages.success(request, "Your profile has been updated successfully!")
         else:
             messages.warning(request, "Invalid input data, please try again.")
 
