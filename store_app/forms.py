@@ -55,7 +55,7 @@ class CustomerPasswordChangeForm(PasswordChangeForm):
 
 
 class CustomerPasswordResetForm(PasswordResetForm):
-    pass
+    email = forms.CharField(widget=forms.EmailInput(attrs={"class": "form-control"}))
 
 
 class CustomerPasswordSetForm(SetPasswordForm):
