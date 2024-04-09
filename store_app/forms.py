@@ -1,5 +1,5 @@
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UsernameField, PasswordResetForm, \
-    PasswordChangeForm
+    PasswordChangeForm, SetPasswordForm
 from django import forms
 from django.contrib.auth.models import User
 
@@ -56,6 +56,17 @@ class CustomerPasswordChangeForm(PasswordChangeForm):
 
 class CustomerPasswordResetForm(PasswordResetForm):
     pass
+
+
+class CustomerPasswordSetForm(SetPasswordForm):
+    new_password1 = forms.CharField(
+        label="New password",
+        widget=forms.PasswordInput(attrs={"class": "form-control", "autocomplete": "current-password"})
+    )
+    new_password2 = forms.CharField(
+        label="Confirm new password",
+        widget=forms.PasswordInput(attrs={"class": "form-control", "autocomplete": "current-password"})
+    )
 
 
 class CustomerProfileForm(forms.ModelForm):

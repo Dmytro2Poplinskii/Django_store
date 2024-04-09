@@ -23,9 +23,7 @@ urlpatterns = [
         ),
         name="login"
     ),
-    path("password-reset/", auth_views.PasswordResetView.as_view(
-        template_name="app/password-reset.html", form_class=forms.CustomerPasswordResetForm
-    ), name="password-reset"),
+
     path("password-change/", auth_views.PasswordChangeView.as_view(
         template_name="app/change_password.html",
         form_class=forms.CustomerPasswordChangeForm,
@@ -35,6 +33,19 @@ urlpatterns = [
         template_name="app/password_change_done.html"
     ), name="password-change-done"),
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
+
+    path("password-reset/", auth_views.PasswordResetView.as_view(
+        template_name="app/password_reset.html", form_class=forms.CustomerPasswordResetForm
+    ), name="password-reset"),
+    path("password-reset/done/", auth_views.PasswordResetDoneView.as_view(
+        tempplate_name="app/password_reset_done.html"
+    ), name="password-reset-done"),
+    path("password-reset-confirm/<uidb64>/<token>/", auth_views.PasswordResetConfirmView.as_view(
+        template_name="app/password_reset_confirm.html", form_class=forms.CustomerPasswordSetForm
+    ), name="password-reset-confirm"),
+    path("password-reset-complete/", auth_views.PasswordResetCompleteView.as_view(
+        template_name="app/password_reset_complete.html"
+    ), name="password-reset-complete"),
 ]
 
 app_name = "store_app"
