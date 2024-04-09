@@ -15,7 +15,7 @@
           {% for input in form %}
             {{ input.label_tag }} {{ input }} <small class="text-danger">{{ input.errors|striptags }}</small>
           {% endfor %}
-          <div><small><a href="{% url "password-reset" %}">Forgot Password?</a></small></div>
+          <div><small><a href="{% url "password_reset" %}">Forgot Password?</a></small></div>
           <input type="submit" class="btn btn-primary mt-4" value="Login">
           <div class="text-danger text-primary fw-bold">
             <small>New user? <a href="{% url "register" %}" class="text-danger">Create an account</a></small>

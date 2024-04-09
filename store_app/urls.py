@@ -15,23 +15,10 @@ urlpatterns = [
     path("address/", views.address, name="address"),
     path("update-address/<int:pk>", views.UpdateAddressView.as_view(), name="update-address"),
 
-    # login
-    path("login/", auth_views.LoginView.as_view(
-        template_name="app/login.html",
-        authentication_form=forms.CustomerLoginForm
-        ),
-        name="login"
-    ),
 
-    path("password-change/", auth_views.PasswordChangeView.as_view(
-        template_name="app/change_password.html",
-        form_class=forms.CustomerPasswordChangeForm,
-        success_url="/store/password-change-done/"
-    ), name="password-change"),
-    path("password-change-done/", auth_views.PasswordChangeDoneView.as_view(
-        template_name="app/password_change_done.html"
-    ), name="password-change-done"),
-    path("logout/", auth_views.LogoutView.as_view(), name="logout"),
+    path("password-reset-done/", auth_views.PasswordResetDoneView.as_view(
+        template_name="app/password_reset_complete.html"
+    ), name="password_reset_done"),
 ]
 
 app_name = "store_app"
