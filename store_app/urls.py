@@ -26,6 +26,14 @@ urlpatterns = [
     path("password_reset/", auth_views.PasswordResetView.as_view(
         template_name="app/password-reset.html", form_class=forms.CustomerPasswordResetForm
     ), name="password-reset"),
+    path("password_change/", auth_views.PasswordChangeView.as_view(
+        template_name="app/change_password.html",
+        form_class=forms.CustomerPasswordChangeForm,
+        success_url="password-change/done"
+    ), name="password-change"),
+    path("password_change/done/", auth_views.PasswordChangeDoneView.as_view(
+        template_name="app/password_change_done.html"
+    ), name="password-change-done"),
 ]
 
 app_name = "store_app"
