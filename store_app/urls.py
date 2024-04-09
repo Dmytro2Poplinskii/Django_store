@@ -12,6 +12,7 @@ urlpatterns = [
     path("category-title/<name>", views.CategoryTitle.as_view(), name="category-title"),
     path("product-detail/<int:pk>", views.ProductDetail.as_view(), name="product-detail"),
     path("profile/", views.CustomerProfileView.as_view(), name="profile"),
+    path("address/", views.CustomerProfileView.as_view(), name="address"),
 
     # login
     path("register/", views.CustomerRegistrationView.as_view(), name="register"),
