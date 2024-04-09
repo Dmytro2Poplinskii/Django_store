@@ -29,6 +29,15 @@
                   <p>City: {{ address.city }}</p>
                   <p>State: {{ address.state }}</p>
                   <p>Zip_code: {{ address.zip_code }}</p>
+                  <p class="text-center">
+                    <a
+                      href="{% url "store_app:update-address" pk=address.id %}"
+                      type="button"
+                      class="btn btn-success"
+                    >
+                      Update
+                    </a>
+                  </p>
                 </div>
               </div>
             </div>

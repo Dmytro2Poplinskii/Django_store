@@ -100,3 +100,15 @@ def address(request: HttpRequest) -> HttpResponse:
     addresses = Customer.objects.filter(user=request.user)
 
     return render(request, "app/address.html", locals())
+
+
+class UpdateAddressView(View):
+    def get(self, request: HttpRequest, pk: int) -> HttpResponse:
+        form = CustomerProfileForm()
+
+        return render(request, "app/update_address.html", locals())
+
+    def post(self, request: HttpRequest, pk: int) -> HttpResponse:
+        form = CustomerProfileForm(request.POST)
+
+        return render(request, "app/update_address.html", locals())
