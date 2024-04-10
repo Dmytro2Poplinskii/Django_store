@@ -16,6 +16,7 @@ urlpatterns = [
     path("update-address/<int:pk>", views.UpdateAddressView.as_view(), name="update-address"),
     path("add-to-cart/", views.add_to_cart, name="add-to-cart"),
     path("cart/", views.show_cart, name="show-cart"),
+    path("checkout/", views.show_cart, name="checkout"),
 
 
     path("password-reset-done/", auth_views.PasswordResetDoneView.as_view(
