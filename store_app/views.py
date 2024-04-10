@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
 
-from .models import Product, Customer
+from .models import Product, Customer, Cart
 from .forms import CustomerRegistrationForm, CustomerProfileForm
 
 
@@ -128,3 +128,19 @@ class UpdateAddressView(View):
             messages.warning(request, "Invalid input data, please try again.")
 
         return redirect("store_app:address")
+
+
+def add_to_cart(request: HttpRequest) -> HttpResponse:
+    user = request.user
+    product_id = request.GET.get("id")
+    product = Product.objects.get(pk=product_id)
+
+    cart = Cart(user=user, product=product).save()
+
+    return redirect("store_app:cart")
+
+
+def show_cart(request: HttpRequest) -> HttpResponse:
+    user = request.user
+    cart = Cart.objects.filter(user=user)
+    return render(request, "app/add_to_cart.html", locals())
