@@ -143,4 +143,13 @@ def add_to_cart(request: HttpRequest) -> HttpResponse:
 def show_cart(request: HttpRequest) -> HttpResponse:
     user = request.user
     cart = Cart.objects.filter(user=user)
+
+    amount = 0
+
+    for price in cart:
+        value = price.product.price_with_discount
+        amount += value
+
+    total_amount = amount + 4
+
     return render(request, "app/add_to_cart.html", locals())
