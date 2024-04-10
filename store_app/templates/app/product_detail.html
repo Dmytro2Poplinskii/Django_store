@@ -24,15 +24,14 @@
         <ul class="fs-5" style="font-family: Helvetica,serif;">
           <li>{{ product.description }}</li>
         </ul>
-        <div class="buttons row flex">
+        <form action="{% url "store_app:add-to-cart" %}" class="d-inline">
+          <input type="hidden" name="product_id" value="{{ product.id }}">
           <button
             type="submit"
-            class="d-grid gap-2 btn1 btn btn-danger p-1 m-1 btn-lg text-decoration-none text-white"
+            class="btn btn-primary shadow px-5 py-2"
           >Add to Cart</button>
-          <div class="btn btn-dark p-1 m-1 btn-lg">
-            <a href="#" class="text-decoration-none text-white">Buy now</a>
-          </div>
-        </div>
+        </form>
+        <a href="{% url "store_app:show-cart" %}" class="btn btn-warning shadow px-5 py-2 ms-4">Buy now</a>
       </div>
     </div>
   </div>

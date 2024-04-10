@@ -132,12 +132,12 @@ class UpdateAddressView(View):
 
 def add_to_cart(request: HttpRequest) -> HttpResponse:
     user = request.user
-    product_id = request.GET.get("id")
+    product_id = request.GET.get("product_id", None)
     product = Product.objects.get(pk=product_id)
 
-    cart = Cart(user=user, product=product).save()
+    Cart(user=user, product=product).save()
 
-    return redirect("store_app:cart")
+    return redirect("store_app:show-cart")
 
 
 def show_cart(request: HttpRequest) -> HttpResponse:
