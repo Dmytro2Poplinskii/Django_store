@@ -131,6 +131,23 @@ class UpdateAddressView(View):
         return redirect("store_app:address")
 
 
+class CheckoutView(View):
+    def get(self, request: HttpRequest) -> HttpResponse:
+        user = request.user
+        addresses = Customer.objects.filter(user=user)
+        carts = Cart.objects.filter(user=user)
+
+        amount = 0
+
+        for cart in carts:
+            value = cart.quantity * cart.product.price_with_discount
+            amount += value
+
+        total_amount = amount + 4
+
+        return render(request, "app/checkout.html", locals())
+
+
 def add_to_cart(request: HttpRequest) -> HttpResponse:
     user = request.user
     product_id = request.GET.get("product_id", None)
