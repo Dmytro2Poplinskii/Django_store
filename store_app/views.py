@@ -1,4 +1,5 @@
-from django.http import HttpResponse, HttpRequest
+from django.db.models import Q
+from django.http import HttpResponse, HttpRequest, JsonResponse
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
@@ -142,14 +143,91 @@ def add_to_cart(request: HttpRequest) -> HttpResponse:
 
 def show_cart(request: HttpRequest) -> HttpResponse:
     user = request.user
-    cart = Cart.objects.filter(user=user)
+    carts = Cart.objects.filter(user=user)
 
     amount = 0
 
-    for price in cart:
-        value = price.product.price_with_discount
+    for cart in carts:
+        value = cart.product.price_with_discount * cart.quantity
         amount += value
 
     total_amount = amount + 4
 
     return render(request, "app/add_to_cart.html", locals())
+
+
+def plus_cart(request: HttpRequest) -> JsonResponse:
+    product_id = request.GET.get("product_id", None)
+    cart = Cart.objects.get(Q(user=request.user) & Q(product=product_id))
+    cart.quantity += 1
+    cart.save()
+
+    user = request.user
+    carts = Cart.objects.filter(user=user)
+
+    amount = 0
+
+    for cart_item in carts:
+        value = cart_item.product.price_with_discount * cart_item.quantity
+        amount += value
+
+    total_amount = amount + 4
+
+    data = {
+        "quantity": cart.quantity,
+        "total_amount": total_amount,
+        "amount": amount,
+    }
+
+    return JsonResponse(data)
+
+
+def minus_cart(request: HttpRequest) -> JsonResponse:
+    product_id = request.GET.get("product_id", None)
+    cart = Cart.objects.get(Q(user=request.user) & Q(product=product_id))
+    cart.quantity -= 1
+    cart.save()
+
+    user = request.user
+    carts = Cart.objects.filter(user=user)
+
+    amount = 0
+
+    for cart_item in carts:
+        value = cart_item.product.price_with_discount * cart_item.quantity
+        amount += value
+
+    total_amount = amount + 4
+
+    data = {
+        "quantity": cart.quantity,
+        "total_amount": total_amount,
+        "amount": amount,
+    }
+
+    return JsonResponse(data)
+
+
+def remove_cart(request: HttpRequest) -> JsonResponse:
+    product_id = request.GET.get("product_id", None)
+    cart = Cart.objects.get(Q(user=request.user) & Q(product=product_id))
+    cart.delete()
+
+    user = request.user
+    carts = Cart.objects.filter(user=user)
+
+    amount = 0
+
+    for cart_item in carts:
+        value = cart_item.product.price_with_discount * cart_item.quantity
+        amount += value
+
+    total_amount = amount + 4
+
+    data = {
+        "quantity": cart.quantity,
+        "total_amount": total_amount,
+        "amount": amount,
+    }
+
+    return JsonResponse(data)
