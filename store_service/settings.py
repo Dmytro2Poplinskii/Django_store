@@ -130,3 +130,6 @@ LOGIN_URL = "/login/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+PUBLIC_LIQPAY_KEY = "sandbox_i46371668947"
+PRIVATE_LIQPAY_KEY = "sandbox_3hsffOlfyTE6Un4oWMsRoSfQfcnr72l0VA5JC6wv"
