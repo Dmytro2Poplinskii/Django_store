@@ -2,7 +2,6 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 
 from . import views
-from . import forms
 
 urlpatterns = [
     path("home/", views.home, name="home"),
@@ -20,7 +19,6 @@ urlpatterns = [
     path("plus-cart/", views.plus_cart, name="plus-cart"),
     path("minus-cart/", views.minus_cart, name="minus-cart"),
     path("remove-cart/", views.remove_cart, name="remove-cart"),
-
 
     path("password-reset-done/", auth_views.PasswordResetDoneView.as_view(
         template_name="app/password_reset_complete.html"

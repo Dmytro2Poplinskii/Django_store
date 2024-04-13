@@ -1,11 +1,17 @@
+from decimal import Decimal
+import uuid
+import pprint
+
 from django.db.models import Q
 from django.http import HttpResponse, HttpRequest, JsonResponse
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
+from django.conf import settings
 
-from .models import Product, Customer, Cart
+from .models import Product, Customer, Cart, Payment, OrderPlaced
 from .forms import CustomerRegistrationForm, CustomerProfileForm
+from .liqpay import LiqPay
 
 
 def home(request: HttpRequest) -> HttpResponse:
@@ -146,6 +152,64 @@ class CheckoutView(View):
         total_amount = amount + 4
 
         return render(request, "app/checkout.html", locals())
+
+    def post(self, request: HttpRequest) -> HttpResponse:
+        total_amount = str(Decimal(request.POST.get("total_amount", 0)))
+        liqpay = LiqPay(public_key=settings.PUBLIC_LIQPAY_KEY, private_key=settings.PRIVATE_LIQPAY_KEY)
+        user = request.user
+
+        order_id = str(uuid.uuid4())
+
+        params = {
+            "version": 3,
+            "public_key": settings.PUBLIC_LIQPAY_KEY,
+            "amount": total_amount,
+            "currency": "USD",
+            "description": f"Payment for order {order_id}",
+            "order_id": order_id,
+            "language": "en",
+            "action": "pay",
+        }
+
+        response = liqpay.api(url="api/3/checkout", params=params)
+
+        if response.status_code == 200:
+            customer_id = request.POST.get("customer_id", None)
+            customer = None
+
+            if customer_id:
+                customer = Customer.objects.get(pk=customer_id)
+            else:
+                messages.warning(request, "Please enter a valid address")
+
+            payment_id = str(uuid.uuid4())
+
+            payment = Payment(
+                user=user,
+                amount=total_amount,
+                order_id=order_id,
+                payment_status="pending",
+                payment_id=payment_id,
+            )
+            payment.save()
+
+            carts = Cart.objects.filter(user=user)
+
+            for cart in carts:
+                order_placed = OrderPlaced(
+                    user=user,
+                    customer=customer,
+                    product=cart.product,
+                    quantity=cart.quantity,
+                    status="Pending",
+                    payment=payment
+                )
+
+                order_placed.save()
+
+            messages.success(request, "Your order has been created successfully!")
+
+        return redirect(response.url)
 
 
 def add_to_cart(request: HttpRequest) -> HttpResponse:
