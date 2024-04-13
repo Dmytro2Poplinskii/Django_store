@@ -79,7 +79,7 @@
               aria-labelledby="profileDropdown"
             >
               <li><a href="{% url "store_app:profile" %}" class="dropdown-item">Profile</a></li>
-              <li><a href="#" class="dropdown-item">Orders</a></li>
+              <li><a href="{% url "store_app:orders" %}" class="dropdown-item">Orders</a></li>
               <li><a href="{% url "password-change" %}" class="dropdown-item">Change password</a></li>
               <li>
                 <form action="{% url "logout" %}" method="post">

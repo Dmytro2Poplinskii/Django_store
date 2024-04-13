@@ -317,5 +317,10 @@ def remove_cart(request: HttpRequest) -> JsonResponse:
 
 
 def payment_done(request: HttpRequest) -> HttpResponse:
-
     return render(request, "app/payment_done.html")
+
+
+def orders(request: HttpRequest) -> HttpResponse:
+    order_placed = OrderPlaced.objects.filter(user=request.user)
+
+    return render(request, "app/orders.html", locals())
