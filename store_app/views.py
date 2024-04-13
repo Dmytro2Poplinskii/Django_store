@@ -169,6 +169,8 @@ class CheckoutView(View):
             "order_id": order_id,
             "language": "en",
             "action": "pay",
+            "result_url": "http://127.0.0.1:8000/store/payment-done/",
+            "server_url": "http://127.0.0.1:8000/store/payment-done/",
         }
 
         response = liqpay.api(url="api/3/checkout", params=params)
@@ -312,3 +314,8 @@ def remove_cart(request: HttpRequest) -> JsonResponse:
     }
 
     return JsonResponse(data)
+
+
+def payment_done(request: HttpRequest) -> HttpResponse:
+
+    return render(request, "app/payment_done.html")
