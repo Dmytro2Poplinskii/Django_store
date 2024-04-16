@@ -48,7 +48,8 @@ class CategoryView(View, LoginRequiredMixin):
 
 
 class CategoryTitle(View, LoginRequiredMixin):
-    def get(self, request: HttpRequest, name: str) -> HttpResponse:
+    @staticmethod
+    def get(request: HttpRequest, name: str) -> HttpResponse:
         total_item, wishlist_item = total_wishlist_items_util(request)
 
         products = Product.objects.filter(title=name)
@@ -58,7 +59,8 @@ class CategoryTitle(View, LoginRequiredMixin):
 
 
 class ProductDetail(View, LoginRequiredMixin):
-    def get(self, request: HttpRequest, pk: int) -> HttpResponse:
+    @staticmethod
+    def get(request: HttpRequest, pk: int) -> HttpResponse:
         total_item, wishlist_item = total_wishlist_items_util(request)
 
         product = Product.objects.get(pk=pk)
@@ -69,14 +71,16 @@ class ProductDetail(View, LoginRequiredMixin):
 
 
 class CustomerRegistrationView(View):
-    def get(self, request: HttpRequest) -> HttpResponse:
+    @staticmethod
+    def get(request: HttpRequest) -> HttpResponse:
         total_item, wishlist_item = total_wishlist_items_util(request)
 
         form = CustomerRegistrationForm()
 
         return render(request, "app/customer_registration.html", locals())
 
-    def post(self, request: HttpRequest) -> HttpResponse:
+    @staticmethod
+    def post(request: HttpRequest) -> HttpResponse:
         form = CustomerRegistrationForm(request.POST)
 
         if form.is_valid():
@@ -89,14 +93,16 @@ class CustomerRegistrationView(View):
 
 
 class CustomerProfileView(View, LoginRequiredMixin):
-    def get(self, request: HttpRequest) -> HttpResponse:
+    @staticmethod
+    def get(request: HttpRequest) -> HttpResponse:
         total_item, wishlist_item = total_wishlist_items_util(request)
 
         form = CustomerProfileForm()
 
         return render(request, "app/profile.html", locals())
 
-    def post(self, request: HttpRequest) -> HttpResponse:
+    @staticmethod
+    def post(request: HttpRequest) -> HttpResponse:
         form = CustomerProfileForm(request.POST)
 
         if form.is_valid():
@@ -137,7 +143,8 @@ def address(request: HttpRequest) -> HttpResponse:
 
 
 class UpdateAddressView(View, LoginRequiredMixin):
-    def get(self, request: HttpRequest, pk: int) -> HttpResponse:
+    @staticmethod
+    def get(request: HttpRequest, pk: int) -> HttpResponse:
         total_item, wishlist_item = total_wishlist_items_util(request)
 
         user_address = Customer.objects.get(pk=pk)
@@ -145,7 +152,8 @@ class UpdateAddressView(View, LoginRequiredMixin):
 
         return render(request, "app/update_address.html", locals())
 
-    def post(self, request: HttpRequest, pk: int) -> HttpResponse:
+    @staticmethod
+    def post(request: HttpRequest, pk: int) -> HttpResponse:
         form = CustomerProfileForm(request.POST)
 
         if form.is_valid():
@@ -167,7 +175,8 @@ class UpdateAddressView(View, LoginRequiredMixin):
 
 
 class CheckoutView(View, LoginRequiredMixin):
-    def get(self, request: HttpRequest) -> HttpResponse:
+    @staticmethod
+    def get(request: HttpRequest) -> HttpResponse:
         total_item, wishlist_item = total_wishlist_items_util(request)
 
         user = request.user
@@ -184,7 +193,8 @@ class CheckoutView(View, LoginRequiredMixin):
 
         return render(request, "app/checkout.html", locals())
 
-    def post(self, request: HttpRequest) -> HttpResponse:
+    @staticmethod
+    def post(request: HttpRequest) -> HttpResponse:
         total_amount = str(Decimal(request.POST.get("total_amount", 0)))
         liqpay = LiqPay(
             public_key=settings.PUBLIC_LIQPAY_KEY,
