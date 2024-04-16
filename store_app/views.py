@@ -397,3 +397,31 @@ def orders(request: HttpRequest) -> HttpResponse:
     order_placed = OrderPlaced.objects.filter(user=request.user)
 
     return render(request, "app/orders.html", locals())
+
+
+def plus_wishlist(request: HttpRequest) -> HttpResponse:
+    if request.method == 'GET':
+        product_id = request.GET.get("product_id", None)
+        product = Product.objects.get(pk=product_id)
+        user = request.user
+        Wishlist(user=user, product=product).save()
+
+        data = {
+            "message": "Added to Wishlist!",
+        }
+
+        return JsonResponse(data)
+
+
+def minus_wishlist(request: HttpRequest) -> HttpResponse:
+    if request.method == 'GET':
+        product_id = request.GET.get("product_id", None)
+        product = Product.objects.get(pk=product_id)
+        user = request.user
+        Wishlist.objects.filter(user=user, product=product).delete()
+
+        data = {
+            "message": "Remove from Wishlist!",
+        }
+
+        return JsonResponse(data)
