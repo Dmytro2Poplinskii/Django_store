@@ -9,7 +9,7 @@ from django.views import View
 from django.contrib import messages
 from django.conf import settings
 
-from .models import Product, Customer, Cart, Payment, OrderPlaced
+from .models import Product, Customer, Cart, Payment, OrderPlaced, Wishlist
 from .forms import CustomerRegistrationForm, CustomerProfileForm
 from .liqpay import LiqPay
 
@@ -75,6 +75,8 @@ class ProductDetail(View):
             total_item = len(Cart.objects.filter(user=request.user))
 
         product = Product.objects.get(pk=pk)
+
+        wishlist = Wishlist.objects.filter(product=product, user=request.user)
 
         return render(request, "app/product_detail.html", locals())
 
