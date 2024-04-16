@@ -2,18 +2,21 @@ from decimal import Decimal
 import uuid
 import pprint
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import HttpResponse, HttpRequest, JsonResponse
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 
 from .models import Product, Customer, Cart, Payment, OrderPlaced, Wishlist
 from .forms import CustomerRegistrationForm, CustomerProfileForm
 from .liqpay import LiqPay
 
 
+@login_required(login_url="login")
 def home(request: HttpRequest) -> HttpResponse:
     total_item = 0
     wishlist_item = 0
@@ -25,6 +28,7 @@ def home(request: HttpRequest) -> HttpResponse:
     return render(request, "app/home.html", locals())
 
 
+@login_required(login_url="login")
 def about(request: HttpRequest) -> HttpResponse:
     total_item = 0
     wishlist_item = 0
@@ -36,6 +40,7 @@ def about(request: HttpRequest) -> HttpResponse:
     return render(request, "app/about.html", locals())
 
 
+@login_required(login_url="login")
 def contact(request: HttpRequest) -> HttpResponse:
     total_item = 0
     wishlist_item = 0
@@ -47,7 +52,7 @@ def contact(request: HttpRequest) -> HttpResponse:
     return render(request, "app/contact.html", locals())
 
 
-class CategoryView(View):
+class CategoryView(View, LoginRequiredMixin):
     def get(self, request: HttpRequest, name: str) -> HttpResponse:
         total_item = 0
         wishlist_item = 0
@@ -62,7 +67,7 @@ class CategoryView(View):
         return render(request, "app/category.html", locals())
 
 
-class CategoryTitle(View):
+class CategoryTitle(View, LoginRequiredMixin):
     def get(self, request: HttpRequest, name: str) -> HttpResponse:
         total_item = 0
         wishlist_item = 0
@@ -77,7 +82,7 @@ class CategoryTitle(View):
         return render(request, "app/category.html", locals())
 
 
-class ProductDetail(View):
+class ProductDetail(View, LoginRequiredMixin):
     def get(self, request: HttpRequest, pk: int) -> HttpResponse:
         total_item = 0
         wishlist_item = 0
@@ -118,7 +123,7 @@ class CustomerRegistrationView(View):
         return render(request, "app/customer_registration.html", locals())
 
 
-class CustomerProfileView(View):
+class CustomerProfileView(View, LoginRequiredMixin):
     def get(self, request: HttpRequest) -> HttpResponse:
         total_item = 0
         wishlist_item = 0
@@ -162,6 +167,7 @@ class CustomerProfileView(View):
         return render(request, "app/profile.html", locals())
 
 
+@login_required(login_url="login")
 def address(request: HttpRequest) -> HttpResponse:
     total_item = 0
     wishlist_item = 0
@@ -175,7 +181,7 @@ def address(request: HttpRequest) -> HttpResponse:
     return render(request, "app/address.html", locals())
 
 
-class UpdateAddressView(View):
+class UpdateAddressView(View, LoginRequiredMixin):
     def get(self, request: HttpRequest, pk: int) -> HttpResponse:
         total_item = 0
         wishlist_item = 0
@@ -210,7 +216,7 @@ class UpdateAddressView(View):
         return redirect("store_app:address")
 
 
-class CheckoutView(View):
+class CheckoutView(View, LoginRequiredMixin):
     def get(self, request: HttpRequest) -> HttpResponse:
         total_item = 0
         wishlist_item = 0
@@ -294,6 +300,7 @@ class CheckoutView(View):
         return redirect(response.url)
 
 
+@login_required(login_url="login")
 def add_to_cart(request: HttpRequest) -> HttpResponse:
     user = request.user
     product_id = request.GET.get("product_id", None)
@@ -304,6 +311,7 @@ def add_to_cart(request: HttpRequest) -> HttpResponse:
     return redirect("store_app:show-cart")
 
 
+@login_required(login_url="login")
 def show_cart(request: HttpRequest) -> HttpResponse:
     total_item = 0
     wishlist_item = 0
@@ -326,6 +334,7 @@ def show_cart(request: HttpRequest) -> HttpResponse:
     return render(request, "app/add_to_cart.html", locals())
 
 
+@login_required(login_url="login")
 def plus_cart(request: HttpRequest) -> JsonResponse:
     product_id = request.GET.get("product_id", None)
     cart = Cart.objects.get(Q(user=request.user) & Q(product=product_id))
@@ -352,6 +361,7 @@ def plus_cart(request: HttpRequest) -> JsonResponse:
     return JsonResponse(data)
 
 
+@login_required(login_url="login")
 def minus_cart(request: HttpRequest) -> JsonResponse:
     product_id = request.GET.get("product_id", None)
     cart = Cart.objects.get(Q(user=request.user) & Q(product=product_id))
@@ -378,6 +388,7 @@ def minus_cart(request: HttpRequest) -> JsonResponse:
     return JsonResponse(data)
 
 
+@login_required(login_url="login")
 def remove_cart(request: HttpRequest) -> JsonResponse:
     product_id = request.GET.get("product_id", None)
     cart = Cart.objects.get(Q(user=request.user) & Q(product=product_id))
@@ -403,6 +414,7 @@ def remove_cart(request: HttpRequest) -> JsonResponse:
     return JsonResponse(data)
 
 
+@login_required(login_url="login")
 def payment_done(request: HttpRequest) -> HttpResponse:
     total_item = 0
     wishlist_item = 0
@@ -414,6 +426,7 @@ def payment_done(request: HttpRequest) -> HttpResponse:
     return render(request, "app/payment_done.html", locals())
 
 
+@login_required(login_url="login")
 def orders(request: HttpRequest) -> HttpResponse:
     total_item = 0
     wishlist_item = 0
@@ -427,6 +440,7 @@ def orders(request: HttpRequest) -> HttpResponse:
     return render(request, "app/orders.html", locals())
 
 
+@login_required(login_url="login")
 def plus_wishlist(request: HttpRequest) -> HttpResponse:
     if request.method == 'GET':
         product_id = request.GET.get("product_id", None)
@@ -441,6 +455,7 @@ def plus_wishlist(request: HttpRequest) -> HttpResponse:
         return JsonResponse(data)
 
 
+@login_required(login_url="login")
 def minus_wishlist(request: HttpRequest) -> HttpResponse:
     if request.method == 'GET':
         product_id = request.GET.get("product_id", None)
@@ -455,6 +470,7 @@ def minus_wishlist(request: HttpRequest) -> HttpResponse:
         return JsonResponse(data)
 
 
+@login_required(login_url="login")
 def search(request: HttpRequest) -> HttpResponse:
     total_item = 0
     wishlist_item = 0
