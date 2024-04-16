@@ -100,7 +100,7 @@
             </a>
           </li>
           <li class="nav-item mx-2">
-            <a href="#" class="nav-link text-white">
+            <a href="{% url "store_app:show-wishlist" %}" class="nav-link text-white">
             {% if wishlist_item > 0 %}
                 <span class="badge bg-danger">
                     {{ wishlist_item }}

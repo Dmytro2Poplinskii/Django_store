@@ -335,6 +335,22 @@ def show_cart(request: HttpRequest) -> HttpResponse:
 
 
 @login_required(login_url="login")
+def show_wishlist(request: HttpRequest) -> HttpResponse:
+    user = request.user
+
+    total_item = 0
+    wishlist_item = 0
+
+    if request.user.is_authenticated:
+        total_item = len(Cart.objects.filter(user=request.user))
+        wishlist_item = len(Wishlist.objects.filter(user=request.user))
+
+    products = Wishlist.objects.filter(user=user)
+
+    return render(request, "app/wishlist.html", locals())
+
+
+@login_required(login_url="login")
 def plus_cart(request: HttpRequest) -> JsonResponse:
     product_id = request.GET.get("product_id", None)
     cart = Cart.objects.get(Q(user=request.user) & Q(product=product_id))
