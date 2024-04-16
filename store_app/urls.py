@@ -23,6 +23,7 @@ urlpatterns = [
     path("remove-cart/", views.remove_cart, name="remove-cart"),
     path("payment-done/", views.payment_done, name="payment-done"),
     path("orders/", views.orders, name="orders"),
+    path("search/", views.search, name="search"),
 
     path("password-reset-done/", auth_views.PasswordResetDoneView.as_view(
         template_name="app/password_reset_complete.html"

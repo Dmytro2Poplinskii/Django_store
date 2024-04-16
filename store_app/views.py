@@ -453,3 +453,17 @@ def minus_wishlist(request: HttpRequest) -> HttpResponse:
         }
 
         return JsonResponse(data)
+
+
+def search(request: HttpRequest) -> HttpResponse:
+    total_item = 0
+    wishlist_item = 0
+
+    if request.user.is_authenticated:
+        total_item = len(Cart.objects.filter(user=request.user))
+        wishlist_item = len(Wishlist.objects.filter(user=request.user))
+
+    query = request.GET.get("search", None)
+    products = Product.objects.filter(title__icontains=query)
+
+    return render(request, "app/search.html", locals())
