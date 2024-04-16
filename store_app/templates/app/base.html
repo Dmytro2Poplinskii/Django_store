@@ -90,7 +90,13 @@
             </ul>
           </li>
           <li class="nav-item mx-2">
-            <a href="{% url "store_app:show-cart" %}" class="nav-link text-white">Cart</a>
+            <a href="{% url "store_app:show-cart" %}" class="nav-link text-white">
+              <span class="badge bg-danger">
+                {% if total_item > 0 %}
+                  {{ total_item }}
+                {% endif %}
+              </span>
+              Cart</a>
           </li>
           <li class="nav-item mx-2">
             <a href="#" class="nav-link text-white">Wishlist</a>

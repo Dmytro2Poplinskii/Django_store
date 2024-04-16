@@ -15,19 +15,39 @@ from .liqpay import LiqPay
 
 
 def home(request: HttpRequest) -> HttpResponse:
-    return render(request, "app/home.html")
+    total_item = 0
+
+    if request.user.is_authenticated:
+        total_item = len(Cart.objects.filter(user=request.user))
+
+    return render(request, "app/home.html", locals())
 
 
 def about(request: HttpRequest) -> HttpResponse:
-    return render(request, "app/about.html")
+    total_item = 0
+
+    if request.user.is_authenticated:
+        total_item = len(Cart.objects.filter(user=request.user))
+
+    return render(request, "app/about.html", locals())
 
 
 def contact(request: HttpRequest) -> HttpResponse:
-    return render(request, "app/contact.html")
+    total_item = 0
+
+    if request.user.is_authenticated:
+        total_item = len(Cart.objects.filter(user=request.user))
+
+    return render(request, "app/contact.html", locals())
 
 
 class CategoryView(View):
     def get(self, request: HttpRequest, name: str) -> HttpResponse:
+        total_item = 0
+
+        if request.user.is_authenticated:
+            total_item = len(Cart.objects.filter(user=request.user))
+
         products = Product.objects.filter(category=name)
         titles = Product.objects.filter(category=name).values("title")
 
@@ -36,6 +56,11 @@ class CategoryView(View):
 
 class CategoryTitle(View):
     def get(self, request: HttpRequest, name: str) -> HttpResponse:
+        total_item = 0
+
+        if request.user.is_authenticated:
+            total_item = len(Cart.objects.filter(user=request.user))
+
         products = Product.objects.filter(title=name)
         titles = Product.objects.filter(category=products[0].category).values("title")
 
@@ -44,6 +69,11 @@ class CategoryTitle(View):
 
 class ProductDetail(View):
     def get(self, request: HttpRequest, pk: int) -> HttpResponse:
+        total_item = 0
+
+        if request.user.is_authenticated:
+            total_item = len(Cart.objects.filter(user=request.user))
+
         product = Product.objects.get(pk=pk)
 
         return render(request, "app/product_detail.html", locals())
@@ -51,6 +81,11 @@ class ProductDetail(View):
 
 class CustomerRegistrationView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
+        total_item = 0
+
+        if request.user.is_authenticated:
+            total_item = len(Cart.objects.filter(user=request.user))
+
         form = CustomerRegistrationForm()
 
         return render(request, "app/customer_registration.html", locals())
@@ -69,7 +104,13 @@ class CustomerRegistrationView(View):
 
 class CustomerProfileView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
+        total_item = 0
+
+        if request.user.is_authenticated:
+            total_item = len(Cart.objects.filter(user=request.user))
+
         form = CustomerProfileForm()
+
         return render(request, "app/profile.html", locals())
 
     def post(self, request: HttpRequest) -> HttpResponse:
@@ -104,6 +145,11 @@ class CustomerProfileView(View):
 
 
 def address(request: HttpRequest) -> HttpResponse:
+    total_item = 0
+
+    if request.user.is_authenticated:
+        total_item = len(Cart.objects.filter(user=request.user))
+
     addresses = Customer.objects.filter(user=request.user)
 
     return render(request, "app/address.html", locals())
@@ -111,6 +157,11 @@ def address(request: HttpRequest) -> HttpResponse:
 
 class UpdateAddressView(View):
     def get(self, request: HttpRequest, pk: int) -> HttpResponse:
+        total_item = 0
+
+        if request.user.is_authenticated:
+            total_item = len(Cart.objects.filter(user=request.user))
+
         user_address = Customer.objects.get(pk=pk)
         form = CustomerProfileForm(instance=user_address)
 
@@ -139,6 +190,11 @@ class UpdateAddressView(View):
 
 class CheckoutView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
+        total_item = 0
+
+        if request.user.is_authenticated:
+            total_item = len(Cart.objects.filter(user=request.user))
+
         user = request.user
         addresses = Customer.objects.filter(user=user)
         carts = Cart.objects.filter(user=user)
@@ -225,6 +281,11 @@ def add_to_cart(request: HttpRequest) -> HttpResponse:
 
 
 def show_cart(request: HttpRequest) -> HttpResponse:
+    total_item = 0
+
+    if request.user.is_authenticated:
+        total_item = len(Cart.objects.filter(user=request.user))
+
     user = request.user
     carts = Cart.objects.filter(user=user)
 
@@ -317,10 +378,20 @@ def remove_cart(request: HttpRequest) -> JsonResponse:
 
 
 def payment_done(request: HttpRequest) -> HttpResponse:
+    total_item = 0
+
+    if request.user.is_authenticated:
+        total_item = len(Cart.objects.filter(user=request.user))
+
     return render(request, "app/payment_done.html")
 
 
 def orders(request: HttpRequest) -> HttpResponse:
+    total_item = 0
+
+    if request.user.is_authenticated:
+        total_item = len(Cart.objects.filter(user=request.user))
+
     order_placed = OrderPlaced.objects.filter(user=request.user)
 
     return render(request, "app/orders.html", locals())
