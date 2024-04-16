@@ -22,14 +22,11 @@ class ParamValidationError(Exception):
 
 
 class LiqPay:
-    _supportedCurrencies = ['EUR', 'USD', 'UAH']
-    _supportedLangs = ['uk', 'en']
-    _supportedActions = ['pay', 'hold', 'subscribe', 'paydonate']
+    _supportedCurrencies = ["EUR", "USD", "UAH"]
+    _supportedLangs = ["uk", "en"]
+    _supportedActions = ["pay", "hold", "subscribe", "paydonate"]
 
-    _button_translations = {
-        'uk': 'Сплатити',
-        'en': 'Pay'
-    }
+    _button_translations = {"uk": "Сплатити", "en": "Pay"}
 
     _FORM_TEMPLATE = """
         <form method="POST" action="{action}" accept-charset="utf-8">
@@ -41,9 +38,18 @@ class LiqPay:
     """
 
     SUPPORTED_PARAMS = [
-        "public_key", "amount", "currency", "description", "order_id",
-        "result_url", "server_url", "type", "signature", "language",
-        "version", "action"
+        "public_key",
+        "amount",
+        "currency",
+        "description",
+        "order_id",
+        "result_url",
+        "server_url",
+        "type",
+        "signature",
+        "language",
+        "version",
+        "action",
     ]
 
     def __init__(self, public_key, private_key, host="https://www.liqpay.ua/"):
@@ -56,7 +62,6 @@ class LiqPay:
         joined_fields = joined_fields.encode("utf-8")
         return base64.b64encode(hashlib.sha1(joined_fields).digest()).decode("ascii")
 
-
     def _prepare_params(self, params):
         params = {} if params is None else deepcopy(params)
         params.update(public_key=self._public_key)
@@ -66,16 +71,16 @@ class LiqPay:
         params = self._prepare_params(params)
 
         params_validator = (
-                    ("version", lambda x: x is not None),
-                    ("action", lambda x: x is not None),
-                )
+            ("version", lambda x: x is not None),
+            ("action", lambda x: x is not None),
+        )
 
         for key, validator in params_validator:
-             if validator(params.get(key)):
+            if validator(params.get(key)):
                 continue
-             raise ParamValidationError("Invalid param: '{}'".format(key))
+            raise ParamValidationError("Invalid param: '{}'".format(key))
 
-        encoded_data, signature = self.get_data_end_signature('api', params)
+        encoded_data, signature = self.get_data_end_signature("api", params)
 
         request_url = urljoin(self._host, url)
         request_data = {"data": encoded_data, "signature": signature}
@@ -92,7 +97,7 @@ class LiqPay:
             ("amount", lambda x: x is not None and float(x) > 0),
             ("currency", lambda x: x is not None and x in self._supportedCurrencies),
             ("action", lambda x: x is not None),
-            ("description", lambda x: x is not None and isinstance(x, str))
+            ("description", lambda x: x is not None and isinstance(x, str)),
         )
         for key, validator in params_validator:
             if validator(params.get(key)):
@@ -100,33 +105,37 @@ class LiqPay:
 
             raise ParamValidationError("Invalid param: '{}'".format(key))
 
-        if 'language' in params:
-            language = params['language'].lower()
+        if "language" in params:
+            language = params["language"].lower()
             if language not in self._supportedLangs:
-                params['language'] = 'uk'
-                language = 'uk'
+                params["language"] = "uk"
+                language = "uk"
         else:
-            language = 'uk'
+            language = "uk"
 
-        encoded_data, signature = self.get_data_end_signature('cnb_form', params)
+        encoded_data, signature = self.get_data_end_signature("cnb_form", params)
 
         form_action_url = urljoin(self._host, "3/checkout/")
         return self._FORM_TEMPLATE.format(
             action=form_action_url,
             data=encoded_data,
             signature=signature,
-            label=self._button_translations[language]
+            label=self._button_translations[language],
         )
 
     def get_data_end_signature(self, type, params):
         json_encoded_params = json.dumps(params, sort_keys=True)
         if type == "cnb_form":
-            bytes_data = json_encoded_params.encode('utf-8')
-            base64_encoded_params = base64.b64encode(bytes_data).decode('utf-8')
-            signature = self._make_signature(self._private_key, base64_encoded_params, self._private_key)
+            bytes_data = json_encoded_params.encode("utf-8")
+            base64_encoded_params = base64.b64encode(bytes_data).decode("utf-8")
+            signature = self._make_signature(
+                self._private_key, base64_encoded_params, self._private_key
+            )
             return base64_encoded_params, signature
         else:
-            signature = self._make_signature(self._private_key, json_encoded_params, self._private_key)
+            signature = self._make_signature(
+                self._private_key, json_encoded_params, self._private_key
+            )
         return json_encoded_params, signature
 
     def cnb_signature(self, params):
@@ -140,12 +149,14 @@ class LiqPay:
         return self.data_to_sign(params)
 
     def str_to_sign(self, str):
-        return base64.b64encode(hashlib.sha1(str.encode("utf-8")).digest()).decode("ascii")
+        return base64.b64encode(hashlib.sha1(str.encode("utf-8")).digest()).decode(
+            "ascii"
+        )
 
     def data_to_sign(self, params):
         json_encoded_params = json.dumps(params, sort_keys=True)
-        bytes_data = json_encoded_params.encode('utf-8')
-        return base64.b64encode(bytes_data).decode('utf-8')
+        bytes_data = json_encoded_params.encode("utf-8")
+        return base64.b64encode(bytes_data).decode("utf-8")
 
     def decode_data_from_str(self, data, signature=None):
         """Decoding data that were encoded by base64.b64encode(str)
@@ -162,8 +173,12 @@ class LiqPay:
 
         """
         if signature:
-            expected_signature = self._make_signature(self._private_key, base64.b64decode(data).decode('utf-8'), self._private_key)
+            expected_signature = self._make_signature(
+                self._private_key,
+                base64.b64decode(data).decode("utf-8"),
+                self._private_key,
+            )
             if expected_signature != signature:
                 raise ParamValidationError("Invalid signature")
 
-        return json.loads(base64.b64decode(data).decode('utf-8'))
+        return json.loads(base64.b64decode(data).decode("utf-8"))

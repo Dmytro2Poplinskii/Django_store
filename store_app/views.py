@@ -241,7 +241,10 @@ class CheckoutView(View, LoginRequiredMixin):
 
     def post(self, request: HttpRequest) -> HttpResponse:
         total_amount = str(Decimal(request.POST.get("total_amount", 0)))
-        liqpay = LiqPay(public_key=settings.PUBLIC_LIQPAY_KEY, private_key=settings.PRIVATE_LIQPAY_KEY)
+        liqpay = LiqPay(
+            public_key=settings.PUBLIC_LIQPAY_KEY,
+            private_key=settings.PRIVATE_LIQPAY_KEY,
+        )
         user = request.user
 
         order_id = str(uuid.uuid4())
@@ -290,7 +293,7 @@ class CheckoutView(View, LoginRequiredMixin):
                     product=cart.product,
                     quantity=cart.quantity,
                     status="Pending",
-                    payment=payment
+                    payment=payment,
                 )
 
                 order_placed.save()
@@ -458,7 +461,7 @@ def orders(request: HttpRequest) -> HttpResponse:
 
 @login_required(login_url="login")
 def plus_wishlist(request: HttpRequest) -> HttpResponse:
-    if request.method == 'GET':
+    if request.method == "GET":
         product_id = request.GET.get("product_id", None)
         product = Product.objects.get(pk=product_id)
         user = request.user
@@ -473,7 +476,7 @@ def plus_wishlist(request: HttpRequest) -> HttpResponse:
 
 @login_required(login_url="login")
 def minus_wishlist(request: HttpRequest) -> HttpResponse:
-    if request.method == 'GET':
+    if request.method == "GET":
         product_id = request.GET.get("product_id", None)
         product = Product.objects.get(pk=product_id)
         user = request.user

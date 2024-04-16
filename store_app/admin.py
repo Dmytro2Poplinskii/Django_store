@@ -19,14 +19,34 @@ class CartAdmin(admin.ModelAdmin):
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
-    list_display = ("id", "user", "amount", "order_id", "payment_status", "payment_id", "paid")
+    list_display = (
+        "id",
+        "user",
+        "amount",
+        "order_id",
+        "payment_status",
+        "payment_id",
+        "paid",
+    )
 
 
 @admin.register(OrderPlaced)
 class OrderPlacedAdmin(admin.ModelAdmin):
-    list_display = ("id", "user", "customer", "quantity", "ordered_date", "status", "payment")
+    list_display = (
+        "id",
+        "user",
+        "customer",
+        "quantity",
+        "ordered_date",
+        "status",
+        "payment",
+    )
 
 
 @admin.register(Wishlist)
 class WishlistAdmin(admin.ModelAdmin):
-    list_display = ("id", "user", "product",)
+    list_display = (
+        "id",
+        "user",
+        "product",
+    )
