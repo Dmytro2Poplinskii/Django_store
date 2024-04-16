@@ -61,7 +61,7 @@ $(".plus-wishlist").click(function() {
 
     $.ajax({
         type: "GET",
-        url: "/plus-wishlist",
+        url: "/store/plus-wishlist",
         data: {
             product_id: id
         },
@@ -76,7 +76,7 @@ $(".minus-wishlist").click(function() {
 
     $.ajax({
         type: "GET",
-        url: "/minus-wishlist",
+        url: "/store/minus-wishlist",
         data: {
             product_id: id
         },
