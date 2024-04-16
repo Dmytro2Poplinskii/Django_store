@@ -55,3 +55,33 @@ $(".remove-cart").click(function() {
 $('input[type=radio][name=customer_id]').change(function() {
     $('#selected_customer_id').val($(this).val());
 });
+
+$(".plus-wishlist").click(function() {
+    let id = $(this).data("pid").toString()
+
+    $.ajax({
+        type: "GET",
+        url: "/plus-wishlist",
+        data: {
+            product_id: id
+        },
+        success: function() {
+            window.location.href = `http://localhost:8000/product-detail/${id}`
+        }
+    })
+})
+
+$(".minus-wishlist").click(function() {
+    let id = $(this).data("pid").toString()
+
+    $.ajax({
+        type: "GET",
+        url: "/minus-wishlist",
+        data: {
+            product_id: id
+        },
+        success: function() {
+            window.location.href = `http://localhost:8000/product-detail/${id}`
+        }
+    })
+})
