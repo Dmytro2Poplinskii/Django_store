@@ -1,4 +1,5 @@
 from django.http import HttpRequest
+from typing import Union
 
 from .models import Cart, Wishlist
 
@@ -12,3 +13,25 @@ def total_wishlist_items_util(request: HttpRequest) -> tuple:
         wishlist_item = len(Wishlist.objects.filter(user=request.user))
 
     return total_item, wishlist_item
+
+
+def change_amount_carts_util(request: HttpRequest, cart: Cart = None, return_type: str = "req") -> dict | tuple:
+    user = request.user
+    carts = Cart.objects.filter(user=user)
+
+    amount = 0
+
+    for cart_item in carts:
+        value = cart_item.product.price_with_discount * cart_item.quantity
+        amount += value
+
+    total_amount = amount + 4
+
+    if return_type == "json":
+        return {
+            "quantity": cart.quantity,
+            "total_amount": total_amount,
+            "amount": amount,
+        }
+    elif return_type == "req":
+        return carts, total_amount

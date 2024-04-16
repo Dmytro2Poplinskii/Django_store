@@ -13,7 +13,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Product, Customer, Cart, Payment, OrderPlaced, Wishlist
 from .forms import CustomerRegistrationForm, CustomerProfileForm
 from .liqpay import LiqPay
-from .utils import total_wishlist_items_util
+from .utils import total_wishlist_items_util, change_amount_carts_util
 
 
 @login_required(login_url="login")
@@ -181,15 +181,7 @@ class CheckoutView(View, LoginRequiredMixin):
 
         user = request.user
         addresses = Customer.objects.filter(user=user)
-        carts = Cart.objects.filter(user=user)
-
-        amount = 0
-
-        for cart in carts:
-            value = cart.quantity * cart.product.price_with_discount
-            amount += value
-
-        total_amount = amount + 4
+        carts, total_amount = change_amount_carts_util(request)
 
         return render(request, "app/checkout.html", locals())
 
@@ -274,15 +266,7 @@ def show_cart(request: HttpRequest) -> HttpResponse:
     total_item, wishlist_item = total_wishlist_items_util(request)
 
     user = request.user
-    carts = Cart.objects.filter(user=user)
-
-    amount = 0
-
-    for cart in carts:
-        value = cart.product.price_with_discount * cart.quantity
-        amount += value
-
-    total_amount = amount + 4
+    carts, total_amount = change_amount_carts_util(request)
 
     return render(request, "app/add_to_cart.html", locals())
 
@@ -305,22 +289,7 @@ def plus_cart(request: HttpRequest) -> JsonResponse:
     cart.quantity += 1
     cart.save()
 
-    user = request.user
-    carts = Cart.objects.filter(user=user)
-
-    amount = 0
-
-    for cart_item in carts:
-        value = cart_item.product.price_with_discount * cart_item.quantity
-        amount += value
-
-    total_amount = amount + 4
-
-    data = {
-        "quantity": cart.quantity,
-        "total_amount": total_amount,
-        "amount": amount,
-    }
+    data = change_amount_carts_util(request, cart)
 
     return JsonResponse(data)
 
@@ -332,22 +301,7 @@ def minus_cart(request: HttpRequest) -> JsonResponse:
     cart.quantity -= 1
     cart.save()
 
-    user = request.user
-    carts = Cart.objects.filter(user=user)
-
-    amount = 0
-
-    for cart_item in carts:
-        value = cart_item.product.price_with_discount * cart_item.quantity
-        amount += value
-
-    total_amount = amount + 4
-
-    data = {
-        "quantity": cart.quantity,
-        "total_amount": total_amount,
-        "amount": amount,
-    }
+    data = change_amount_carts_util(request, cart, "json")
 
     return JsonResponse(data)
 
@@ -358,22 +312,7 @@ def remove_cart(request: HttpRequest) -> JsonResponse:
     cart = Cart.objects.get(Q(user=request.user) & Q(product=product_id))
     cart.delete()
 
-    user = request.user
-    carts = Cart.objects.filter(user=user)
-
-    amount = 0
-
-    for cart_item in carts:
-        value = cart_item.product.price_with_discount * cart_item.quantity
-        amount += value
-
-    total_amount = amount + 4
-
-    data = {
-        "quantity": cart.quantity,
-        "total_amount": total_amount,
-        "amount": amount,
-    }
+    data = change_amount_carts_util(request, cart, "json")
 
     return JsonResponse(data)
 
