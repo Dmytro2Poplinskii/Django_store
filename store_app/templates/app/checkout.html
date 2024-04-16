@@ -41,7 +41,13 @@
               <p>{{ address.location }} {{ address.state }} - {{ address.zip_code }}</p>
             </div>
             <div class="form-check mt-2 mb-5">
-              <input type="radio" class="form-check-input" name="customer_id" id="cust_add{{ forloop.counter }}" value="{{ address.id }}">
+              <input
+                type="radio"
+                class="form-check-input"
+                name="customer_id"
+                id="cust_add{{ forloop.counter }}"
+                value="{{ address.id }}"
+              >
               <label for="cust_add{{ forloop.counter }}" class="form-check-label fw-bold">
                 Address:{{ forloop.counter }}
               </label>
