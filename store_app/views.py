@@ -13,7 +13,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Product, Customer, Cart, Payment, OrderPlaced, Wishlist
 from .forms import CustomerRegistrationForm, CustomerProfileForm
 from .liqpay import LiqPay
-from .utils import total_wishlist_items_util, change_amount_carts_util
+from .utils import total_wishlist_items_util, change_amount_carts_util, change_cart_quantity_util
 
 
 @login_required(login_url="login")
@@ -38,7 +38,8 @@ def contact(request: HttpRequest) -> HttpResponse:
 
 
 class CategoryView(View, LoginRequiredMixin):
-    def get(self, request: HttpRequest, name: str) -> HttpResponse:
+    @staticmethod
+    def get(request: HttpRequest, name: str) -> HttpResponse:
         total_item, wishlist_item = total_wishlist_items_util(request)
 
         products = Product.objects.filter(category=name)
@@ -284,10 +285,7 @@ def show_wishlist(request: HttpRequest) -> HttpResponse:
 
 @login_required(login_url="login")
 def plus_cart(request: HttpRequest) -> JsonResponse:
-    product_id = request.GET.get("product_id", None)
-    cart = Cart.objects.get(Q(user=request.user) & Q(product=product_id))
-    cart.quantity += 1
-    cart.save()
+    cart = change_cart_quantity_util(request, 1)
 
     data = change_amount_carts_util(request, cart)
 
@@ -296,10 +294,7 @@ def plus_cart(request: HttpRequest) -> JsonResponse:
 
 @login_required(login_url="login")
 def minus_cart(request: HttpRequest) -> JsonResponse:
-    product_id = request.GET.get("product_id", None)
-    cart = Cart.objects.get(Q(user=request.user) & Q(product=product_id))
-    cart.quantity -= 1
-    cart.save()
+    cart = change_cart_quantity_util(request, -1)
 
     data = change_amount_carts_util(request, cart, "json")
 

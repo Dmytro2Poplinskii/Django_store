@@ -1,5 +1,5 @@
 from django.http import HttpRequest
-from typing import Union
+from django.db.models import Q
 
 from .models import Cart, Wishlist
 
@@ -35,3 +35,12 @@ def change_amount_carts_util(request: HttpRequest, cart: Cart = None, return_typ
         }
     elif return_type == "req":
         return carts, total_amount
+
+
+def change_cart_quantity_util(request: HttpRequest, quantity: int) -> Cart:
+    product_id = request.GET.get("product_id", None)
+    cart = Cart.objects.get(Q(user=request.user) & Q(product=product_id))
+    cart.quantity += quantity
+    cart.save()
+
+    return cart
