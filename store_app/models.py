@@ -101,3 +101,7 @@ class OrderPlaced(models.Model):
     def total_cost(self) -> float:
         return self.quantity * self.product.price_with_discount
 
+
+class Wishlist(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
