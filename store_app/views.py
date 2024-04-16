@@ -1,6 +1,5 @@
 from decimal import Decimal
 import uuid
-import pprint
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
@@ -14,52 +13,33 @@ from django.contrib.auth.decorators import login_required
 from .models import Product, Customer, Cart, Payment, OrderPlaced, Wishlist
 from .forms import CustomerRegistrationForm, CustomerProfileForm
 from .liqpay import LiqPay
+from .utils import total_wishlist_items_util
 
 
 @login_required(login_url="login")
 def home(request: HttpRequest) -> HttpResponse:
-    total_item = 0
-    wishlist_item = 0
-
-    if request.user.is_authenticated:
-        total_item = len(Cart.objects.filter(user=request.user))
-        wishlist_item = len(Wishlist.objects.filter(user=request.user))
+    total_item, wishlist_item = total_wishlist_items_util(request)
 
     return render(request, "app/home.html", locals())
 
 
 @login_required(login_url="login")
 def about(request: HttpRequest) -> HttpResponse:
-    total_item = 0
-    wishlist_item = 0
-
-    if request.user.is_authenticated:
-        total_item = len(Cart.objects.filter(user=request.user))
-        wishlist_item = len(Wishlist.objects.filter(user=request.user))
+    total_item, wishlist_item = total_wishlist_items_util(request)
 
     return render(request, "app/about.html", locals())
 
 
 @login_required(login_url="login")
 def contact(request: HttpRequest) -> HttpResponse:
-    total_item = 0
-    wishlist_item = 0
-
-    if request.user.is_authenticated:
-        total_item = len(Cart.objects.filter(user=request.user))
-        wishlist_item = len(Wishlist.objects.filter(user=request.user))
+    total_item, wishlist_item = total_wishlist_items_util(request)
 
     return render(request, "app/contact.html", locals())
 
 
 class CategoryView(View, LoginRequiredMixin):
     def get(self, request: HttpRequest, name: str) -> HttpResponse:
-        total_item = 0
-        wishlist_item = 0
-
-        if request.user.is_authenticated:
-            total_item = len(Cart.objects.filter(user=request.user))
-            wishlist_item = len(Wishlist.objects.filter(user=request.user))
+        total_item, wishlist_item = total_wishlist_items_util(request)
 
         products = Product.objects.filter(category=name)
         titles = Product.objects.filter(category=name).values("title")
@@ -69,12 +49,7 @@ class CategoryView(View, LoginRequiredMixin):
 
 class CategoryTitle(View, LoginRequiredMixin):
     def get(self, request: HttpRequest, name: str) -> HttpResponse:
-        total_item = 0
-        wishlist_item = 0
-
-        if request.user.is_authenticated:
-            total_item = len(Cart.objects.filter(user=request.user))
-            wishlist_item = len(Wishlist.objects.filter(user=request.user))
+        total_item, wishlist_item = total_wishlist_items_util(request)
 
         products = Product.objects.filter(title=name)
         titles = Product.objects.filter(category=products[0].category).values("title")
@@ -84,12 +59,7 @@ class CategoryTitle(View, LoginRequiredMixin):
 
 class ProductDetail(View, LoginRequiredMixin):
     def get(self, request: HttpRequest, pk: int) -> HttpResponse:
-        total_item = 0
-        wishlist_item = 0
-
-        if request.user.is_authenticated:
-            total_item = len(Cart.objects.filter(user=request.user))
-            wishlist_item = len(Wishlist.objects.filter(user=request.user))
+        total_item, wishlist_item = total_wishlist_items_util(request)
 
         product = Product.objects.get(pk=pk)
 
@@ -100,12 +70,7 @@ class ProductDetail(View, LoginRequiredMixin):
 
 class CustomerRegistrationView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
-        total_item = 0
-        wishlist_item = 0
-
-        if request.user.is_authenticated:
-            total_item = len(Cart.objects.filter(user=request.user))
-            wishlist_item = len(Wishlist.objects.filter(user=request.user))
+        total_item, wishlist_item = total_wishlist_items_util(request)
 
         form = CustomerRegistrationForm()
 
@@ -125,12 +90,7 @@ class CustomerRegistrationView(View):
 
 class CustomerProfileView(View, LoginRequiredMixin):
     def get(self, request: HttpRequest) -> HttpResponse:
-        total_item = 0
-        wishlist_item = 0
-
-        if request.user.is_authenticated:
-            total_item = len(Cart.objects.filter(user=request.user))
-            wishlist_item = len(Wishlist.objects.filter(user=request.user))
+        total_item, wishlist_item = total_wishlist_items_util(request)
 
         form = CustomerProfileForm()
 
@@ -169,12 +129,7 @@ class CustomerProfileView(View, LoginRequiredMixin):
 
 @login_required(login_url="login")
 def address(request: HttpRequest) -> HttpResponse:
-    total_item = 0
-    wishlist_item = 0
-
-    if request.user.is_authenticated:
-        total_item = len(Cart.objects.filter(user=request.user))
-        wishlist_item = len(Wishlist.objects.filter(user=request.user))
+    total_item, wishlist_item = total_wishlist_items_util(request)
 
     addresses = Customer.objects.filter(user=request.user)
 
@@ -183,12 +138,7 @@ def address(request: HttpRequest) -> HttpResponse:
 
 class UpdateAddressView(View, LoginRequiredMixin):
     def get(self, request: HttpRequest, pk: int) -> HttpResponse:
-        total_item = 0
-        wishlist_item = 0
-
-        if request.user.is_authenticated:
-            total_item = len(Cart.objects.filter(user=request.user))
-            wishlist_item = len(Wishlist.objects.filter(user=request.user))
+        total_item, wishlist_item = total_wishlist_items_util(request)
 
         user_address = Customer.objects.get(pk=pk)
         form = CustomerProfileForm(instance=user_address)
@@ -218,12 +168,7 @@ class UpdateAddressView(View, LoginRequiredMixin):
 
 class CheckoutView(View, LoginRequiredMixin):
     def get(self, request: HttpRequest) -> HttpResponse:
-        total_item = 0
-        wishlist_item = 0
-
-        if request.user.is_authenticated:
-            total_item = len(Cart.objects.filter(user=request.user))
-            wishlist_item = len(Wishlist.objects.filter(user=request.user))
+        total_item, wishlist_item = total_wishlist_items_util(request)
 
         user = request.user
         addresses = Customer.objects.filter(user=user)
@@ -316,12 +261,7 @@ def add_to_cart(request: HttpRequest) -> HttpResponse:
 
 @login_required(login_url="login")
 def show_cart(request: HttpRequest) -> HttpResponse:
-    total_item = 0
-    wishlist_item = 0
-
-    if request.user.is_authenticated:
-        total_item = len(Cart.objects.filter(user=request.user))
-        wishlist_item = len(Wishlist.objects.filter(user=request.user))
+    total_item, wishlist_item = total_wishlist_items_util(request)
 
     user = request.user
     carts = Cart.objects.filter(user=user)
@@ -341,12 +281,7 @@ def show_cart(request: HttpRequest) -> HttpResponse:
 def show_wishlist(request: HttpRequest) -> HttpResponse:
     user = request.user
 
-    total_item = 0
-    wishlist_item = 0
-
-    if request.user.is_authenticated:
-        total_item = len(Cart.objects.filter(user=request.user))
-        wishlist_item = len(Wishlist.objects.filter(user=request.user))
+    total_item, wishlist_item = total_wishlist_items_util(request)
 
     products = Wishlist.objects.filter(user=user)
 
@@ -435,24 +370,14 @@ def remove_cart(request: HttpRequest) -> JsonResponse:
 
 @login_required(login_url="login")
 def payment_done(request: HttpRequest) -> HttpResponse:
-    total_item = 0
-    wishlist_item = 0
-
-    if request.user.is_authenticated:
-        total_item = len(Cart.objects.filter(user=request.user))
-        wishlist_item = len(Wishlist.objects.filter(user=request.user))
+    total_item, wishlist_item = total_wishlist_items_util(request)
 
     return render(request, "app/payment_done.html", locals())
 
 
 @login_required(login_url="login")
 def orders(request: HttpRequest) -> HttpResponse:
-    total_item = 0
-    wishlist_item = 0
-
-    if request.user.is_authenticated:
-        total_item = len(Cart.objects.filter(user=request.user))
-        wishlist_item = len(Wishlist.objects.filter(user=request.user))
+    total_item, wishlist_item = total_wishlist_items_util(request)
 
     order_placed = OrderPlaced.objects.filter(user=request.user)
 
@@ -491,12 +416,7 @@ def minus_wishlist(request: HttpRequest) -> HttpResponse:
 
 @login_required(login_url="login")
 def search(request: HttpRequest) -> HttpResponse:
-    total_item = 0
-    wishlist_item = 0
-
-    if request.user.is_authenticated:
-        total_item = len(Cart.objects.filter(user=request.user))
-        wishlist_item = len(Wishlist.objects.filter(user=request.user))
+    total_item, wishlist_item = total_wishlist_items_util(request)
 
     query = request.GET.get("search", None)
     products = Product.objects.filter(title__icontains=query)
