@@ -14,6 +14,9 @@ class Payment(models.Model):
     payment_id = models.CharField(max_length=100, blank=True, null=True)
     paid = models.BooleanField(default=False)
 
+    def __str__(self) -> str:
+        return f"{self.user.username}'s Payment {self.amount} for {self.order_id}"
+
 
 class Product(models.Model):
     title = models.CharField(max_length=100)
@@ -30,7 +33,7 @@ class Product(models.Model):
         return float(self.selling_price - self.discount_price)
 
     def __str__(self) -> str:
-        return f"{self.title}"
+        return f"{self.title}, price: {self.price_with_discount}"
 
 
 class Customer(models.Model):
@@ -55,6 +58,9 @@ class Cart(models.Model):
     def total_cost(self) -> Decimal:
         return self.quantity * self.product.discount_price
 
+    def __str__(self) -> str:
+        return f"Cart of {self.user.username}"
+
 
 class OrderPlaced(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -69,7 +75,18 @@ class OrderPlaced(models.Model):
     def total_cost(self) -> float:
         return self.quantity * self.product.price_with_discount
 
+    def __str__(self) -> str:
+        return (
+            f"Order information for "
+            f"{self.user.username}. "
+            f"Status: {self.status}. "
+            f"Payment: {self.payment.amount}$"
+        )
+
 
 class Wishlist(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return f"Wishlist of {self.user.username} with {self.product}"
