@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-6^)3+g0a8_j5v$*(p=1k05@k$*g2n2+g=mn77_#keb8t5$&lb("
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -134,5 +138,5 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-PUBLIC_LIQPAY_KEY = "sandbox_i46371668947"
-PRIVATE_LIQPAY_KEY = "sandbox_3hsffOlfyTE6Un4oWMsRoSfQfcnr72l0VA5JC6wv"
+PUBLIC_LIQPAY_KEY = os.getenv("PUBLIC_LIQPAY_KEY")
+PRIVATE_LIQPAY_KEY = os.getenv("PRIVATE_LIQPAY_KEY")
