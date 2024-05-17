@@ -53,7 +53,6 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "store_app.middleware.RedirectNotLoginMiddleware",
-    "store_app.middleware.RedirectLoginMiddleware",
 ]
 
 ROOT_URLCONF = "store_service.urls"
