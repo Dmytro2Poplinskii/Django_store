@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from decimal import Decimal
 
 from store_app.models import Product, Customer, Cart, OrderPlaced, Wishlist
-from store_app.constants import CATEGORY_CHOICES, STATE_CHOICES, STATUS_CHOICES
 from payment.models import Payment
 
 

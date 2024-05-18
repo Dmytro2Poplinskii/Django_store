@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpRequest
 from django.contrib.auth.decorators import login_required
 
-from store_app.utils import total_wishlist_items_util
+from store_app.utils.utils import total_wishlist_items_util
 
 
 @login_required(login_url="login")

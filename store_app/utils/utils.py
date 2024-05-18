@@ -1,7 +1,7 @@
 from django.http import HttpRequest
 from django.db.models import Q
 
-from .models import Cart, Wishlist
+from store_app.models import Cart, Wishlist
 
 
 def total_wishlist_items_util(request: HttpRequest) -> tuple:

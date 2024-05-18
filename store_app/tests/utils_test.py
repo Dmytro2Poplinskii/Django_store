@@ -3,7 +3,7 @@ from django.contrib.auth.models import User, AnonymousUser
 from decimal import Decimal
 
 from store_app.models import Cart, Product, Wishlist
-from store_app.utils import (
+from store_app.utils.utils import (
     total_wishlist_items_util,
     change_amount_carts_util,
     change_cart_quantity_util,

@@ -12,8 +12,8 @@ from django.contrib.auth.decorators import login_required
 
 from .models import Product, Customer, Cart, Payment, OrderPlaced, Wishlist
 from .forms import CustomerRegistrationForm, CustomerProfileForm
-from .liqpay import LiqPay
-from .utils import total_wishlist_items_util, change_amount_carts_util, change_cart_quantity_util
+from payment.liqpay import LiqPay
+from store_app.utils.utils import total_wishlist_items_util, change_amount_carts_util, change_cart_quantity_util
 
 
 @login_required(login_url="login")
