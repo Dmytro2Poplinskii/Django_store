@@ -61,7 +61,10 @@ ROOT_URLCONF = "store_service.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [
+            os.path.join(BASE_DIR, "store_app", "templates"),
+            os.path.join(BASE_DIR, "payment", "templates")
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
