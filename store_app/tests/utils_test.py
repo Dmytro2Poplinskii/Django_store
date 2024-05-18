@@ -3,13 +3,19 @@ from django.contrib.auth.models import User, AnonymousUser
 from decimal import Decimal
 
 from store_app.models import Cart, Product, Wishlist
-from store_app.utils import total_wishlist_items_util, change_amount_carts_util, change_cart_quantity_util
+from store_app.utils import (
+    total_wishlist_items_util,
+    change_amount_carts_util,
+    change_cart_quantity_util,
+)
 
 
 class UtilsTestCase(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
-        self.user = User.objects.create_user(username="testuser", password="testpassword")
+        self.user = User.objects.create_user(
+            username="testuser", password="testpassword"
+        )
 
         self.product = Product.objects.create(
             title="Product 1",

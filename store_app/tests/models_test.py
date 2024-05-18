@@ -11,11 +11,11 @@ class ProductModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         Product.objects.create(
-            title='Test Product',
+            title="Test Product",
             selling_price=100.00,
             discount_price=10.00,
-            description='Test description',
-            category='CR'
+            description="Test description",
+            category="CR",
         )
 
     def test_price_with_discount(self):
@@ -25,45 +25,45 @@ class ProductModelTest(TestCase):
 
     def test_str_representation(self):
         product = Product.objects.get(id=1)
-        expected_str = 'Test Product, price: 90.0'
+        expected_str = "Test Product, price: 90.0"
         self.assertEqual(str(product), expected_str)
 
 
 class CustomerModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        User.objects.create(username='testuser')
+        User.objects.create(username="testuser")
         Customer.objects.create(
-            user=User.objects.get(username='testuser'),
-            name='Test Customer',
-            location='Test Location',
-            city='Test City',
+            user=User.objects.get(username="testuser"),
+            name="Test Customer",
+            location="Test Location",
+            city="Test City",
             phone=123456789,
             zip_code=12345,
-            state='AL'
+            state="AL",
         )
 
     def test_str_representation(self):
         customer = Customer.objects.get(id=1)
-        expected_str = 'Test Customer'
+        expected_str = "Test Customer"
         self.assertEqual(str(customer), expected_str)
 
 
 class CartModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        User.objects.create(username='testuser')
+        User.objects.create(username="testuser")
         Product.objects.create(
-            title='Test Product',
+            title="Test Product",
             selling_price=100.00,
             discount_price=10.00,
-            description='Test description',
-            category='CR'
+            description="Test description",
+            category="CR",
         )
         Cart.objects.create(
-            user=User.objects.get(username='testuser'),
+            user=User.objects.get(username="testuser"),
             product=Product.objects.get(id=1),
-            quantity=2
+            quantity=2,
         )
 
     def test_total_cost(self):
@@ -73,45 +73,45 @@ class CartModelTest(TestCase):
 
     def test_str_representation(self):
         cart = Cart.objects.get(id=1)
-        expected_str = 'Cart of testuser'
+        expected_str = "Cart of testuser"
         self.assertEqual(str(cart), expected_str)
 
 
 class OrderPlacedModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        User.objects.create(username='testuser')
+        User.objects.create(username="testuser")
         Product.objects.create(
-            title='Test Product',
+            title="Test Product",
             selling_price=100.00,
             discount_price=10.00,
-            description='Test description',
-            category='CR'
+            description="Test description",
+            category="CR",
         )
         Customer.objects.create(
-            user=User.objects.get(username='testuser'),
-            name='Test Customer',
-            location='Test Location',
-            city='Test City',
+            user=User.objects.get(username="testuser"),
+            name="Test Customer",
+            location="Test Location",
+            city="Test City",
             phone=123456789,
             zip_code=12345,
-            state='AL'
+            state="AL",
         )
         Payment.objects.create(
-            user=User.objects.get(username='testuser'),
+            user=User.objects.get(username="testuser"),
             amount=100.00,
-            order_id='Test Order ID',
-            payment_status='Test Payment Status',
-            payment_id='Test Payment ID',
-            paid=True
+            order_id="Test Order ID",
+            payment_status="Test Payment Status",
+            payment_id="Test Payment ID",
+            paid=True,
         )
         OrderPlaced.objects.create(
-            user=User.objects.get(username='testuser'),
+            user=User.objects.get(username="testuser"),
             customer=Customer.objects.get(id=1),
             product=Product.objects.get(id=1),
             quantity=2,
-            status='Test Status',
-            payment=Payment.objects.get(id=1)
+            status="Test Status",
+            payment=Payment.objects.get(id=1),
         )
 
     def test_total_cost(self):
@@ -121,27 +121,29 @@ class OrderPlacedModelTest(TestCase):
 
     def test_str_representation(self):
         order_placed = OrderPlaced.objects.get(id=1)
-        expected_str = 'Order information for testuser. Status: Test Status. Payment: 100.0$'
+        expected_str = (
+            "Order information for testuser. Status: Test Status. Payment: 100.0$"
+        )
         self.assertEqual(str(order_placed), expected_str)
 
 
 class WishlistModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        User.objects.create(username='testuser')
+        User.objects.create(username="testuser")
         Product.objects.create(
-            title='Test Product',
+            title="Test Product",
             selling_price=100.00,
             discount_price=10.00,
-            description='Test description',
-            category='CR'
+            description="Test description",
+            category="CR",
         )
         Wishlist.objects.create(
-            user=User.objects.get(username='testuser'),
-            product=Product.objects.get(id=1)
+            user=User.objects.get(username="testuser"),
+            product=Product.objects.get(id=1),
         )
 
     def test_str_representation(self):
         wishlist = Wishlist.objects.get(id=1)
-        expected_str = 'Wishlist of testuser with Test Product, price: 90.0'
+        expected_str = "Wishlist of testuser with Test Product, price: 90.0"
         self.assertEqual(str(wishlist), expected_str)
