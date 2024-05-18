@@ -3,7 +3,7 @@ from decimal import Decimal
 from django.contrib.auth.models import User
 from django.db import models
 
-from .choices import CATEGORY_CHOICES, STATE_CHOICES, STATUS_CHOICES
+from .constants import CATEGORY_CHOICES, STATE_CHOICES, STATUS_CHOICES
 
 
 class Payment(models.Model):
