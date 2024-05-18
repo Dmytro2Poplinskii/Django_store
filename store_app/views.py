@@ -287,9 +287,9 @@ def show_wishlist(request: HttpRequest) -> HttpResponse:
 def plus_cart(request: HttpRequest) -> JsonResponse:
     cart = change_cart_quantity_util(request, 1)
 
-    data = change_amount_carts_util(request, cart)
+    data = change_amount_carts_util(request, cart, "json")
 
-    return JsonResponse(data)
+    return JsonResponse(data, safe=False)
 
 
 @login_required(login_url="login")

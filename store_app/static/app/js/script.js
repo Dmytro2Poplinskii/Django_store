@@ -4,7 +4,7 @@ $(".plus-cart").click(function() {
 
     $.ajax({
         type: "GET",
-        url: "/store/plus-cart",
+        url: "/plus-cart",
         data: {
             product_id: id
         },
