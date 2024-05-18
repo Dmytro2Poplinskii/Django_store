@@ -28,7 +28,6 @@ urlpatterns = [
     path("plus-wishlist/", views.plus_wishlist, name="plus-wishlist"),
     path("minus-wishlist/", views.minus_wishlist, name="minus-wishlist"),
     path("remove-cart/", views.remove_cart, name="remove-cart"),
-    path("payment-done/", views.payment_done, name="payment-done"),
     path("orders/", views.orders, name="orders"),
     path("search/", views.search, name="search"),
     path(

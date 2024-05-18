@@ -313,13 +313,6 @@ def remove_cart(request: HttpRequest) -> JsonResponse:
 
 
 @login_required(login_url="login")
-def payment_done(request: HttpRequest) -> HttpResponse:
-    total_item, wishlist_item = total_wishlist_items_util(request)
-
-    return render(request, "app/payment_done.html", locals())
-
-
-@login_required(login_url="login")
 def orders(request: HttpRequest) -> HttpResponse:
     total_item, wishlist_item = total_wishlist_items_util(request)
 
