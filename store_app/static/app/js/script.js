@@ -22,7 +22,7 @@ $(".minus-cart").click(function() {
 
     $.ajax({
         type: "GET",
-        url: "/store/minus-cart",
+        url: "/minus-cart",
         data: {
             product_id: id
         },
@@ -40,7 +40,7 @@ $(".remove-cart").click(function() {
 
     $.ajax({
         type: "GET",
-        url: "/store/remove-cart",
+        url: "/remove-cart",
         data: {
             product_id: id
         },
@@ -61,7 +61,7 @@ $(".plus-wishlist").click(function() {
 
     $.ajax({
         type: "GET",
-        url: "/store/plus-wishlist",
+        url: "/plus-wishlist",
         data: {
             product_id: id
         },
@@ -76,7 +76,7 @@ $(".minus-wishlist").click(function() {
 
     $.ajax({
         type: "GET",
-        url: "/store/minus-wishlist",
+        url: "/minus-wishlist",
         data: {
             product_id: id
         },
