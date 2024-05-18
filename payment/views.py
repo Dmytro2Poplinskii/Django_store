@@ -9,4 +9,4 @@ from store_app.utils import total_wishlist_items_util
 def payment_done(request: HttpRequest) -> HttpResponse:
     total_item, wishlist_item = total_wishlist_items_util(request)
 
-    return render(request, "app/payment_done.html", locals())
+    return render(request, "payment_done.html", locals())
