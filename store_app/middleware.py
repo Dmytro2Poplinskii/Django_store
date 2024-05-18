@@ -7,7 +7,11 @@ class RedirectNotLoginMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        if not request.user.is_authenticated and request.path != reverse("login"):
-            return HttpResponseRedirect(reverse("login"))
+        login_url = reverse("login")
+        register_url = reverse("register")
+
+        if not request.user.is_authenticated and request.path not in [login_url, register_url]:
+            return HttpResponseRedirect(login_url)
+
         response = self.get_response(request)
         return response
