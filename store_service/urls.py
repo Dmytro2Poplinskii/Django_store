@@ -11,6 +11,7 @@ from store_app import views
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("store_app.urls")),
+    path("", include("payment.urls")),
     path("register/", views.CustomerRegistrationView.as_view(), name="register"),
     path(
         "password-reset/",
